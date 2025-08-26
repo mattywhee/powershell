@@ -11,7 +11,9 @@ A curated collection of PowerShell scripts for managing and automating Microsoft
 
 ## 🚀 Purpose
 
-Streamline your admin workflows, automate repetitive tasks, and gain deeper insights into your Microsoft 365 tenant—all through scriptable magic.
+Streamline your admin workflows, automate repetitive tasks, and gain deeper insights into your Microsoft 365 tenant.
+
+Inspired by Maester.dev.
 
 ## 📦 What's Inside
 
