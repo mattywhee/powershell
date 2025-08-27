@@ -3,7 +3,7 @@
 Title: Import Office 365 Security Groups for GCC High Tenant
 Purpose: This script imports security groups, membership, and ownership from exported CSV files
 Author: Migration Assistant
-Date: $(Get-Date)
+Date: 8/26/2025
 
 # Full migration (recommended sequence)
 .\Import-SecurityGroups-GCCHigh.ps1 -All
