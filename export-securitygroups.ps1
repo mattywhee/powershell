@@ -3,7 +3,7 @@
 Title: Export Office 365 Security Groups for Tenant Migration
 Purpose: This script exports security groups, membership, and ownership for migration from Commercial M365 to GCC High
 Author: Migration Assistant
-Date: $(Get-Date)
+Date: 8/26/2025
 
 # Basic usage - connects automatically and exports to default location
 .\Export-SecurityGroups.ps1
