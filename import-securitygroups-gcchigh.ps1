@@ -1,4 +1,5 @@
 <# 
+
 Title: Import Office 365 Security Groups for GCC High Tenant
 Purpose: This script imports security groups, membership, and ownership from exported CSV files
 Author: Migration Assistant
@@ -20,9 +21,10 @@ Date: $(Get-Date)
 
 # Add prefixes for testing
 .\Import-SecurityGroups-GCCHigh.ps1 -CreateGroups -GroupNamePrefix "MIGRATED_" -WhatIf
-#>
 
-#Requires -Modules AzureAD, ExchangeOnlineManagement
+# Requires -Modules AzureAD, ExchangeOnlineManagement
+
+#>
 
 param(
 [Parameter(Mandatory=$false)]
