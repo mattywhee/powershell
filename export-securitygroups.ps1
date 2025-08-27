@@ -6,16 +6,16 @@ Author: Migration Assistant
 Date: $(Get-Date)
 
 # Basic usage - connects automatically and exports to default location
-.\Export-SecurityGroups-Migration.ps1
+.\Export-SecurityGroups.ps1
 
 # Custom output location
-.\Export-SecurityGroups-Migration.ps1 -OutputPath "D:\Migration\SecurityGroups\"
+.\Export-SecurityGroups.ps1 -OutputPath "D:\Migration\SecurityGroups\"
 
 # Include mail-enabled security groups
-.\Export-SecurityGroups-Migration.ps1 -IncludeMailEnabledGroups
+.\Export-SecurityGroups.ps1 -IncludeMailEnabledGroups
 
 # Don't auto-connect (if already connected)
-.\Export-SecurityGroups-Migration.ps1 -ConnectToServices:$false
+.\Export-SecurityGroups.ps1 -ConnectToServices:$false
 
 # Requires -Modules AzureAD, ExchangeOnlineManagement
 
