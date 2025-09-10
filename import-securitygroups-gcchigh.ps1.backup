@@ -30,7 +30,7 @@ param(
 [Parameter(Mandatory=$false)]
 [string]$ImportPath = “C:\temp\seclists",
 
-
+```
 [Parameter(Mandatory=$false)]
 [string]$GroupsFile = "",
 
@@ -69,7 +69,7 @@ param(
 
 [Parameter(Mandatory=$false)]
 [switch]$ContinueOnError = $true
-
+```
 
 )
 
@@ -88,7 +88,7 @@ param(
 [switch]$NoConsole
 )
 
-
+```
 $logEntry = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') [$Level] $Message"
 Add-Content -Path $logFile -Value $logEntry
 
@@ -101,7 +101,7 @@ if (!$NoConsole) {
         default { Write-Host $Message }
     }
 }
-
+```
 
 }
 
@@ -110,11 +110,11 @@ if (!$NoConsole) {
 function Write-ErrorLog {
 param([string]$Message)
 
-
+```
 $errorEntry = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') $Message"
 Add-Content -Path $errorLogFile -Value $errorEntry
 Write-Log -Message $Message -Level "ERROR"
-
+```
 
 }
 
@@ -123,7 +123,7 @@ Write-Log -Message $Message -Level "ERROR"
 function Find-ExportFiles {
 param([string]$Path)
 
-
+```
 $files = @{}
 
 if ([string]::IsNullOrEmpty($GroupsFile)) {
@@ -157,7 +157,7 @@ if ([string]::IsNullOrEmpty($OwnersFile)) {
 }
 
 return $files
-
+```
 
 }
 
@@ -174,7 +174,7 @@ Write-ErrorLog “Failed to connect to Azure AD: $($_.Exception.Message)”
 exit 1
 }
 
-
+```
 Write-Log "Connecting to Exchange Online..." -Level "INFO"
 try {
     Connect-ExchangeOnline -ShowProgress $true -ErrorAction Stop
@@ -184,7 +184,7 @@ catch {
     Write-ErrorLog "Failed to connect to Exchange Online: $($_.Exception.Message)"
     exit 1
 }
-
+```
 
 }
 
@@ -197,7 +197,7 @@ param(
 [string]$OriginalUPN
 )
 
-
+```
 $user = $null
 
 # Try by display name first
@@ -240,7 +240,7 @@ if (![string]::IsNullOrEmpty($OriginalUPN)) {
 }
 
 return $null
-
+```
 
 }
 
@@ -252,7 +252,7 @@ param(
 [string]$MailNickname
 )
 
-
+```
 $fullGroupName = "$GroupNamePrefix$DisplayName$GroupNameSuffix"
 
 # Try by display name first
@@ -280,7 +280,7 @@ if (![string]::IsNullOrEmpty($MailNickname)) {
 }
 
 return $null
-
+```
 
 }
 
@@ -289,7 +289,7 @@ return $null
 function Import-SecurityGroups {
 param([array]$Groups)
 
-
+```
 Write-Log "Starting security group creation process..." -Level "INFO"
 $successCount = 0
 $errorCount = 0
@@ -347,7 +347,7 @@ foreach ($group in $Groups) {
 }
 
 Write-Log "Group creation completed - Success: $successCount, Errors: $errorCount, Skipped: $skippedCount" -Level "INFO"
-
+```
 
 }
 
@@ -356,7 +356,7 @@ Write-Log "Group creation completed - Success: $successCount, Errors: $errorCoun
 function Import-GroupOwners {
 param([array]$Owners)
 
-
+```
 Write-Log "Starting group ownership assignment process..." -Level "INFO"
 $successCount = 0
 $errorCount = 0
@@ -438,7 +438,7 @@ foreach ($groupOwners in $ownersByGroup) {
 }
 
 Write-Log "Owner assignment completed - Success: $successCount, Errors: $errorCount" -Level "INFO"
-
+```
 
 }
 
@@ -447,7 +447,7 @@ Write-Log "Owner assignment completed - Success: $successCount, Errors: $errorCo
 function Import-GroupMembers {
 param([array]$Members)
 
-
+```
 Write-Log "Starting group membership assignment process..." -Level "INFO"
 $successCount = 0
 $errorCount = 0
@@ -529,7 +529,7 @@ foreach ($groupMembers in $membersByGroup) {
 }
 
 Write-Log "Member assignment completed - Success: $successCount, Errors: $errorCount" -Level "INFO"
-
+```
 
 }
 
@@ -579,7 +579,7 @@ Write-ErrorLog “Groups file not found or not specified”
 }
 }
 
-
+```
 # Import and add owners
 if ($AddOwners) {
     if ($exportFiles.Owners -and (Test-Path $exportFiles.Owners)) {
@@ -603,8 +603,9 @@ if ($AddMembers) {
 }
 
 Write-Log "Import process completed successfully!" -Level "SUCCESS"
+```
 
-}
+# }
 catch {
 Write-ErrorLog “Import process failed: $($*.Exception.Message)”
 exit 1
@@ -650,7 +651,7 @@ Post-Migration Tasks:
 Note: Check the detailed logs for complete operation results.
 “@
 
-
+```
 $summary | Out-File -FilePath $summaryFile -Encoding UTF8
 Write-Log "Created import summary: $summaryFile" -Level "SUCCESS"
 
@@ -660,6 +661,6 @@ Write-Host "Check the log files for detailed results:" -ForegroundColor White
 Write-Host "  Log: $logFile" -ForegroundColor Gray
 Write-Host "  Errors: $errorLogFile" -ForegroundColor Gray
 Write-Host "  Summary: $summaryFile" -ForegroundColor Gray
-
+```
 
 }

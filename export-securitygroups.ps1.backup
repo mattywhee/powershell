@@ -25,13 +25,13 @@ param(
 [Parameter(Mandatory=$false)]
 [string]$OutputPath = “C:\temp\seclists",
 
-
+```
 [Parameter(Mandatory=$false)]
 [switch]$ConnectToServices = $true,
 
 [Parameter(Mandatory=$false)]
 [switch]$IncludeMailEnabledGroups = $false
-
+```
 
 )
 
@@ -40,12 +40,12 @@ param(
 function Ensure-OutputDirectory {
 param([string]$Path)
 
-
+```
 if (!(Test-Path -Path $Path)) {
     Write-Host "Creating output directory: $Path" -ForegroundColor Green
     New-Item -ItemType Directory -Path $Path -Force | Out-Null
 }
-
+```
 
 }
 
@@ -62,7 +62,7 @@ Write-Error “Failed to connect to Azure AD: $($_.Exception.Message)”
 exit 1
 }
 
-
+```
 Write-Host "Connecting to Exchange Online..." -ForegroundColor Yellow
 try {
     Connect-ExchangeOnline -ShowProgress $true -ErrorAction Stop
@@ -72,7 +72,7 @@ catch {
     Write-Error "Failed to connect to Exchange Online: $($_.Exception.Message)"
     exit 1
 }
-
+```
 
 }
 
@@ -81,7 +81,7 @@ catch {
 function Get-UserDetails {
 param([string]$ObjectId)
 
-
+```
 try {
     $user = Get-AzureADUser -ObjectId $ObjectId -ErrorAction SilentlyContinue
     if ($user) {
@@ -99,7 +99,7 @@ catch {
 }
 
 return $null
-
+```
 
 }
 
@@ -108,7 +108,7 @@ return $null
 function Get-GroupDetails {
 param([string]$ObjectId)
 
-
+```
 try {
     $group = Get-AzureADGroup -ObjectId $ObjectId -ErrorAction SilentlyContinue
     if ($group) {
@@ -124,7 +124,7 @@ catch {
 }
 
 return $null
-
+```
 
 }
 
@@ -178,7 +178,7 @@ $counter++
 $percentComplete = [math]::Round(($counter / $allGroups.Count) * 100, 2)
 Write-Progress -Activity “Processing Security Groups” -Status “Processing group $counter of $($allGroups.Count): $($group.DisplayName)” -PercentComplete $percentComplete
 
-
+```
 Write-Host "Processing: $($group.DisplayName)" -ForegroundColor White
 
 # Get group properties
@@ -285,7 +285,7 @@ try {
 catch {
     Write-Warning "Could not retrieve owners for group: $($group.DisplayName) - $($_.Exception.Message)"
 }
-
+```
 
 }
 
@@ -347,7 +347,7 @@ Migration Considerations:
 1. Add members and owners after group creation
 1. Update any applications or services that reference these groups
 1. Test group-based permissions thoroughly
-"@
+   “@
 
 $summary | Out-File -FilePath $summaryFile -Encoding UTF8
 Write-Host “Created summary report: $summaryFile” -ForegroundColor Green
