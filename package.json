@@ -1,0 +1,21 @@
+{
+  "name": "powershell-report-screenshots",
+  "version": "1.0.0",
+  "description": "Playwright integration for automating HTML compliance report screenshots",
+  "main": "screenshot-report.js",
+  "scripts": {
+    "test": "node screenshot-report.js --test",
+    "screenshot": "node screenshot-report.js"
+  },
+  "keywords": [
+    "playwright",
+    "screenshot",
+    "automation",
+    "reports"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.40.0"
+  }
+}
