@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMMC Assessment Report - Sample Organization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .tenant-info {
+            background-color: #f8f9fa;
+            padding: 30px 40px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .tenant-info h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 1.1em;
+            color: #333;
+        }
+        
+        .summary {
+            padding: 40px;
+            background-color: #fff;
+        }
+        
+        .summary h2 {
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card.compliant {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .stat-card.non-compliant {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        }
+        
+        .stat-value {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+        
+        .compliance-bar {
+            width: 100%;
+            height: 40px;
+            background-color: #e0e0e0;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .compliance-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+            transition: width 0.5s ease;
+        }
+        
+        .severity-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .severity-item {
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .severity-item.critical {
+            background-color: #ffebee;
+            border-left: 4px solid #c62828;
+        }
+        
+        .severity-item.high {
+            background-color: #fff3e0;
+            border-left: 4px solid #ef6c00;
+        }
+        
+        .severity-item.medium {
+            background-color: #fff9c4;
+            border-left: 4px solid #f9a825;
+        }
+        
+        .severity-item.low {
+            background-color: #e8f5e9;
+            border-left: 4px solid #43a047;
+        }
+        
+        .results {
+            padding: 40px;
+            background-color: #fafafa;
+        }
+        
+        .results h2 {
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        
+        .control-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+        }
+        
+        .control-card.non-compliant {
+            border-left-color: #eb3349;
+        }
+        
+        .control-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .control-title {
+            flex: 1;
+        }
+        
+        .control-id {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1em;
+        }
+        
+        .control-name {
+            font-size: 1.3em;
+            margin: 5px 0;
+            color: #333;
+        }
+        
+        .control-family {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .control-status {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            white-space: nowrap;
+        }
+        
+        .control-status.compliant {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .control-status.non-compliant {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        
+        .severity-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .severity-badge.critical {
+            background-color: #c62828;
+            color: white;
+        }
+        
+        .severity-badge.high {
+            background-color: #ef6c00;
+            color: white;
+        }
+        
+        .control-description {
+            color: #666;
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .findings {
+            margin: 20px 0;
+        }
+        
+        .findings h4 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .findings ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .findings li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .findings li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .evidence {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        
+        .evidence h4 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+        
+        .evidence-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .evidence-list li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.9em;
+            color: #555;
+        }
+        
+        .evidence-list li:before {
+            content: "📄";
+            position: absolute;
+            left: 0;
+        }
+        
+        .footer {
+            background-color: #333;
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+        
+        .footer p {
+            margin: 5px 0;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ CMMC Compliance Assessment Report</h1>
+            <div class="subtitle">NIST 800-171 R3 Requirements</div>
+        </div>
+        
+        <div class="tenant-info">
+            <h2>Tenant Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Organization</span>
+                    <span class="info-value">Sample Organization</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Tenant ID</span>
+                    <span class="info-value">12345678-1234-1234-1234-123456789012</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Assessment Date</span>
+                    <span class="info-value">2025-10-25 14:30:00</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Verified Domains</span>
+                    <span class="info-value">sample.com, sample.onmicrosoft.com</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="summary">
+            <h2>Executive Summary</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">10</div>
+                    <div class="stat-label">Total Controls Assessed</div>
+                </div>
+                <div class="stat-card compliant">
+                    <div class="stat-value">7</div>
+                    <div class="stat-label">Compliant Controls</div>
+                </div>
+                <div class="stat-card non-compliant">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Non-Compliant Controls</div>
+                </div>
+            </div>
+            
+            <div class="compliance-bar">
+                <div class="compliance-fill" style="width: 70%;">
+                    70% Compliant
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 30px; color: #333;">Non-Compliant Items by Severity</h3>
+            <div class="severity-breakdown">
+                <div class="severity-item critical">
+                    <div style="font-size: 2em; font-weight: bold;">1</div>
+                    <div>Critical</div>
+                </div>
+                <div class="severity-item high">
+                    <div style="font-size: 2em; font-weight: bold;">2</div>
+                    <div>High</div>
+                </div>
+                <div class="severity-item medium">
+                    <div style="font-size: 2em; font-weight: bold;">0</div>
+                    <div>Medium</div>
+                </div>
+                <div class="severity-item low">
+                    <div style="font-size: 2em; font-weight: bold;">0</div>
+                    <div>Low</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="results">
+            <h2>Detailed Assessment Results</h2>
+
+            <!-- Example Compliant Control -->
+            <div class="control-card">
+                <div class="control-header">
+                    <div class="control-title">
+                        <div class="control-id">SC-13
+                            <span class="severity-badge critical">Critical</span>
+                        </div>
+                        <div class="control-name">Cryptographic Protection</div>
+                        <div class="control-family">System and Communications Protection (SC)</div>
+                    </div>
+                    <div class="control-status compliant">COMPLIANT</div>
+                </div>
+                
+                <div class="control-description">
+                    <strong>Description:</strong> Implement cryptographic mechanisms to prevent unauthorized disclosure of information
+                </div>
+                
+                <div class="findings">
+                    <h4>Findings:</h4>
+                    <ul>
+                        <li>Microsoft 365 provides encryption at rest and in transit by default</li>
+                    </ul>
+                </div>
+                
+                <div class="evidence">
+                    <h4>📋 Evidence:</h4>
+                    <ul class="evidence-list">
+                        <li>Encryption at rest: Enabled by default for all M365 services</li>
+                        <li>Encryption in transit: TLS 1.2+ enforced for all connections</li>
+                        <li>Organization verified domains: 2</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Example Non-Compliant Control -->
+            <div class="control-card non-compliant">
+                <div class="control-header">
+                    <div class="control-title">
+                        <div class="control-id">IA-2
+                            <span class="severity-badge critical">Critical</span>
+                        </div>
+                        <div class="control-name">Identification and Authentication (Organizational Users)</div>
+                        <div class="control-family">Identification and Authentication (IA)</div>
+                    </div>
+                    <div class="control-status non-compliant">NON-COMPLIANT</div>
+                </div>
+                
+                <div class="control-description">
+                    <strong>Description:</strong> Uniquely identify and authenticate organizational users
+                </div>
+                
+                <div class="findings">
+                    <h4>Findings:</h4>
+                    <ul>
+                        <li>MFA is enforced through 1 active conditional access policy/policies</li>
+                        <li>Not all users have MFA registered (78.5% registered)</li>
+                    </ul>
+                </div>
+                
+                <div class="evidence">
+                    <h4>📋 Evidence:</h4>
+                    <ul class="evidence-list">
+                        <li>Active MFA Policy: Require MFA for All Users (State: enabled)</li>
+                        <li>Users with MFA registered: 157 of 200 (78.5%)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Example Non-Compliant Control -->
+            <div class="control-card non-compliant">
+                <div class="control-header">
+                    <div class="control-title">
+                        <div class="control-id">IA-5
+                            <span class="severity-badge high">High</span>
+                        </div>
+                        <div class="control-name">Authenticator Management</div>
+                        <div class="control-family">Identification and Authentication (IA)</div>
+                    </div>
+                    <div class="control-status non-compliant">NON-COMPLIANT</div>
+                </div>
+                
+                <div class="control-description">
+                    <strong>Description:</strong> Manage information system authenticators
+                </div>
+                
+                <div class="findings">
+                    <h4>Findings:</h4>
+                    <ul>
+                        <li>Password expiration should be set to 60 days or less (Current: 90 days)</li>
+                    </ul>
+                </div>
+                
+                <div class="evidence">
+                    <h4>📋 Evidence:</h4>
+                    <ul class="evidence-list">
+                        <li>Password validity period: 90 days - NON-COMPLIANT</li>
+                        <li>Authentication methods policy configured: 00000000-0000-0000-0000-000000000000</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Example Non-Compliant Control -->
+            <div class="control-card non-compliant">
+                <div class="control-header">
+                    <div class="control-title">
+                        <div class="control-id">AC-12
+                            <span class="severity-badge high">High</span>
+                        </div>
+                        <div class="control-name">Session Termination</div>
+                        <div class="control-family">Access Control (AC)</div>
+                    </div>
+                    <div class="control-status non-compliant">NON-COMPLIANT</div>
+                </div>
+                
+                <div class="control-description">
+                    <strong>Description:</strong> Automatically terminate user sessions after a defined period of inactivity
+                </div>
+                
+                <div class="findings">
+                    <h4>Findings:</h4>
+                    <ul>
+                        <li>No session timeout policies found - consider implementing sign-in frequency controls</li>
+                    </ul>
+                </div>
+                
+                <div class="evidence">
+                    <h4>📋 Evidence:</h4>
+                    <ul class="evidence-list">
+                        <li>Session timeout: NOT CONFIGURED</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Example Compliant Control -->
+            <div class="control-card">
+                <div class="control-header">
+                    <div class="control-title">
+                        <div class="control-id">AU-2
+                            <span class="severity-badge high">High</span>
+                        </div>
+                        <div class="control-name">Audit Events</div>
+                        <div class="control-family">Audit and Accountability (AU)</div>
+                    </div>
+                    <div class="control-status compliant">COMPLIANT</div>
+                </div>
+                
+                <div class="control-description">
+                    <strong>Description:</strong> Identify the types of events the system is capable of logging
+                </div>
+                
+                <div class="findings">
+                    <h4>Findings:</h4>
+                    <ul>
+                        <li>Audit logging is active with 10 recent events captured</li>
+                    </ul>
+                </div>
+                
+                <div class="evidence">
+                    <h4>📋 Evidence:</h4>
+                    <ul class="evidence-list">
+                        <li>Recent audit events: 10 events in the last query</li>
+                        <li>Latest audit event: Update user at 2025-10-25 14:15:32</li>
+                        <li>Sign-in logging is active with 10 recent events</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="footer">
+            <p><strong>CMMC Assessment Tool v1.0.0</strong></p>
+            <p>This report was automatically generated on 2025-10-25 14:30:00</p>
+            <p>For questions or support, please contact your compliance team</p>
+        </div>
+    </div>
+</body>
+</html>
