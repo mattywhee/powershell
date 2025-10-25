@@ -42,9 +42,19 @@ function parseArgs() {
         } else if (arg === '--test') {
             args.test = true;
         } else if (arg === '--input' || arg === '-i') {
-            args.input = process.argv[++i];
+            if (i + 1 < process.argv.length) {
+                args.input = process.argv[++i];
+            } else {
+                console.error('Error: --input requires a path argument');
+                process.exit(1);
+            }
         } else if (arg === '--output' || arg === '-o') {
-            args.output = process.argv[++i];
+            if (i + 1 < process.argv.length) {
+                args.output = process.argv[++i];
+            } else {
+                console.error('Error: --output requires a path argument');
+                process.exit(1);
+            }
         }
     }
 
@@ -163,15 +173,24 @@ function generateSampleReport() {
 function getHtmlFiles(inputPath) {
     const htmlFiles = [];
     
-    if (fs.statSync(inputPath).isDirectory()) {
-        const files = fs.readdirSync(inputPath);
-        for (const file of files) {
-            if (file.endsWith('.html') || file.endsWith('.htm')) {
-                htmlFiles.push(path.join(inputPath, file));
+    // Check if path exists first
+    if (!fs.existsSync(inputPath)) {
+        return htmlFiles;
+    }
+    
+    try {
+        if (fs.statSync(inputPath).isDirectory()) {
+            const files = fs.readdirSync(inputPath);
+            for (const file of files) {
+                if (file.endsWith('.html') || file.endsWith('.htm')) {
+                    htmlFiles.push(path.join(inputPath, file));
+                }
             }
+        } else if (inputPath.endsWith('.html') || inputPath.endsWith('.htm')) {
+            htmlFiles.push(inputPath);
         }
-    } else if (inputPath.endsWith('.html') || inputPath.endsWith('.htm')) {
-        htmlFiles.push(inputPath);
+    } catch (error) {
+        console.error(`Error reading path ${inputPath}: ${error.message}`);
     }
     
     return htmlFiles;
@@ -259,11 +278,53 @@ async function main() {
     // Launch browser - try to use system browser if available
     let browser;
     try {
-        browser = await chromium.launch({
-            executablePath: '/usr/bin/chromium'
-        });
+        // Try platform-specific browser paths
+        let browserPath = null;
+        
+        if (process.platform === 'linux') {
+            // Linux paths
+            const linuxPaths = ['/usr/bin/chromium', '/usr/bin/chromium-browser', '/usr/bin/google-chrome'];
+            for (const p of linuxPaths) {
+                if (fs.existsSync(p)) {
+                    browserPath = p;
+                    break;
+                }
+            }
+        } else if (process.platform === 'darwin') {
+            // macOS paths
+            const macPaths = [
+                '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+                '/Applications/Chromium.app/Contents/MacOS/Chromium'
+            ];
+            for (const p of macPaths) {
+                if (fs.existsSync(p)) {
+                    browserPath = p;
+                    break;
+                }
+            }
+        } else if (process.platform === 'win32') {
+            // Windows paths
+            const winPaths = [
+                'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+                'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+                process.env.LOCALAPPDATA + '\\Google\\Chrome\\Application\\chrome.exe'
+            ];
+            for (const p of winPaths) {
+                if (fs.existsSync(p)) {
+                    browserPath = p;
+                    break;
+                }
+            }
+        }
+        
+        if (browserPath) {
+            browser = await chromium.launch({ executablePath: browserPath });
+        } else {
+            // Fall back to Playwright's bundled browser
+            browser = await chromium.launch();
+        }
     } catch (error) {
-        console.log('Trying to launch with default Playwright browser...');
+        console.log('Using Playwright bundled browser...');
         browser = await chromium.launch();
     }
     
